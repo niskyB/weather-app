@@ -46,6 +46,7 @@ export type WeatherResponse = {
   main: Main;
   wind: Wind;
   clouds: Clouds;
+  visibility: number;
   dt: string;
   sys: Sys;
   timezone: number;

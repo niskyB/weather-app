@@ -1,10 +1,9 @@
 "use client";
 
+import { Header } from "@/components/Header";
 import { Input } from "@/components/Input";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetWeather } from "@/hooks/weather";
-import getIcon from "@/utils/getIcon";
-import getTempIcon from "@/utils/getTemp";
 import { useCallback, useState } from "react";
 
 export default function Home() {
@@ -20,15 +19,16 @@ export default function Home() {
   );
 
   return (
-    <main className={"dark"}>
-      <div className="text-gray-100  max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-center py-10">
+    <main>
+      <Header />
+      <div className="max-w-screen-xl min-h-screen mx-auto px-4 lg:px-6 flex flex-col items-center py-10">
         <Input value={value} onChangeInput={onChangeInput} />
         {isFetching ? (
           <>
             <div role="status">
               <svg
                 aria-hidden="true"
-                className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                className="w-8 h-8 text-gray-200 animate-spin fill-blue-600"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -49,114 +49,92 @@ export default function Home() {
           <>
             {weather && weather.weather?.length > 0 ? (
               <>
-                <img
-                  className="h-40"
-                  src={getIcon(
-                    weather?.weather[0].id ? weather?.weather[0].id : 800
-                  )}
-                  alt=""
-                />
-                <span className="text-5xl dark:text-white text-gray-700 mb-5 font-bold flex items-center justify-center">
-                  <img
-                    className="h-20 mr-3"
-                    src={getTempIcon(
-                      Math.ceil(weather?.main.temp ? weather.main.temp : 0)
-                    )}
-                    alt=""
-                  />
-                  {Math.ceil(weather?.main.temp ? weather.main.temp : 0)}°C
-                </span>
-                <span className="mb-5 font-semibold dark:text-white text-gray-700">
-                  <span className="text-2xl ">{weather?.name}, </span>
-                  <span className="uppercase text-2xl">
-                    {weather?.sys.country}
-                  </span>
-                </span>
-                <ul className="flex flex-col sm:flex-row items-center mb-6 space-y-2 sm:space-y-0 dark:text-white text-gray-700">
-                  <li className='sm:after:content-["•"] sm:after:mx-3 after:opacity-70'>
-                    <span className="font-bold">Feels like: </span>
-                    <span>
-                      {Math.ceil(
-                        weather?.main.feels_like ? weather?.main.feels_like : 0
-                      )}
-                      °C
-                    </span>
-                  </li>
-                  <li className='sm:after:content-["•"] sm:after:mx-3 after:opacity-70'>
-                    <span className="font-bold">Humidity:</span>{" "}
-                    <span>{weather?.main.humidity}%</span>
-                  </li>
-                  <li className="">
-                    <span className="font-bold">Info:</span>{" "}
-                    <span>{weather?.weather[0].main}</span>
-                  </li>
-                </ul>
+                <div className="max-h-screen w-full flex items-center justify-center">
+                  <div className="flex flex-col bg-white rounded p-4 w-full max-w-xs">
+                    <div className="font-bold text-xl text-gray-600">
+                      <span className="text-2xl ">{weather?.name}, </span>
+                      <span className="uppercase text-2xl">
+                        {weather?.sys.country}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {new Date().toDateString()}
+                    </div>
+                    <div className="mt-6 text-6xl self-center inline-flex items-center justify-center rounded-lg text-indigo-400 h-24 w-24">
+                      <svg
+                        className="w-32 h-32"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div className="flex flex-row items-center justify-center mt-6 text-gray-600">
+                      <div className="font-medium text-6xl">
+                        {Math.ceil(weather?.main.temp ? weather.main.temp : 0)}°
+                      </div>
+                      <div className="flex flex-col items-center ml-6">
+                        <div>{weather?.weather[0].main}</div>
+                        <div className="mt-1">
+                          <span className="text-sm">
+                            <i className="far fa-long-arrow-up"></i>
+                          </span>
+                          <span className="text-sm font-light text-gray-500">
+                            {Math.ceil(
+                              weather?.main.temp_max ? weather.main.temp_max : 0
+                            )}
+                            °C
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-sm">
+                            <i className="far fa-long-arrow-down"></i>
+                          </span>
+                          <span className="text-sm font-light text-gray-500">
+                            {Math.ceil(
+                              weather?.main.temp_min ? weather.main.temp_min : 0
+                            )}
+                            °C
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-row justify-between mt-6 text-gray-500">
+                      <div className="flex flex-col items-center">
+                        <div className="font-medium text-sm">Wind</div>
+                        <div className="text-sm text-gray-500">
+                          {weather?.wind.speed}m/s
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="font-medium text-sm">Humidity</div>
+                        <div className="text-sm text-gray-500">
+                          {weather?.main.humidity}%
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="font-medium text-sm">Visibility</div>
+                        <div className="text-sm text-gray-500">
+                          {weather?.visibility ? weather.visibility / 1000 : 0}
+                          km
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </>
             ) : (
               <div>
                 <span className="text-red-500 mt-4">No result</span>
               </div>
             )}
-            <div className="min-h-screen flex items-center justify-center">
-              <div className="flex flex-col bg-white rounded p-4 w-full max-w-xs">
-                <div className="font-bold text-xl">Sydney</div>
-                <div className="text-sm text-gray-500">
-                  Thursday 10 May 2020
-                </div>
-                <div className="mt-6 text-6xl self-center inline-flex items-center justify-center rounded-lg text-indigo-400 h-24 w-24">
-                  <svg
-                    className="w-32 h-32"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                    ></path>
-                  </svg>
-                </div>
-                <div className="flex flex-row items-center justify-center mt-6">
-                  <div className="font-medium text-6xl">24°</div>
-                  <div className="flex flex-col items-center ml-6">
-                    <div>Cloudy</div>
-                    <div className="mt-1">
-                      <span className="text-sm">
-                        <i className="far fa-long-arrow-up"></i>
-                      </span>
-                      <span className="text-sm font-light text-gray-500">
-                        28°C
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-sm">
-                        <i className="far fa-long-arrow-down"></i>
-                      </span>
-                      <span className="text-sm font-light text-gray-500">
-                        20°C
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-row justify-between mt-6">
-                  <div className="flex flex-col items-center">
-                    <div className="font-medium text-sm">Wind</div>
-                    <div className="text-sm text-gray-500">9k/h</div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="font-medium text-sm">Humidity</div>
-                    <div className="text-sm text-gray-500">68%</div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="font-medium text-sm">Visibility</div>
-                    <div className="text-sm text-gray-500">10km</div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </>
         )}
       </div>

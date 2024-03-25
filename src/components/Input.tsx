@@ -7,11 +7,11 @@ type IProps = {
 
 export const Input: React.FC<IProps> = ({ value, onChangeInput }) => {
   return (
-    <form className={"dark"}>
+    <form>
       <div className="h-16">
         <input
-          className="bg-gray-50 border-gray-300 dark:bg-[#1F2937] text-black border-2 dark:border-gray-600 text-md rounded focus:ring-blue-500 block w-full p-2.5 placeholder-gray-400 dark:text-white  focus:border-blue-500"
-          placeholder="&#xF002;   Search"
+          className="bg-gray-50 border-gray-300 text-black border-2 text-md rounded focus:ring-blue-500 block w-full p-2.5 placeholder-gray-400  focus:border-blue-500"
+          placeholder="Search"
           value={value}
           onChange={(e) => onChangeInput(e)}
         />
