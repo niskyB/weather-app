@@ -1,112 +1,164 @@
-import Image from "next/image";
+"use client";
+
+import { Input } from "@/components/Input";
+import useDebounce from "@/hooks/useDebounce";
+import { useGetWeather } from "@/hooks/weather";
+import getIcon from "@/utils/getIcon";
+import getTempIcon from "@/utils/getTemp";
+import { useCallback, useState } from "react";
 
 export default function Home() {
+  const [value, setValue] = useState<string>("Ho Chi Minh");
+  const debounceValue = useDebounce(value, 500);
+  const { data: weather, isFetching } = useGetWeather(debounceValue);
+
+  const onChangeInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+    },
+    []
+  );
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+    <main className={"dark"}>
+      <div className="text-gray-100  max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-center py-10">
+        <Input value={value} onChangeInput={onChangeInput} />
+        {isFetching ? (
+          <>
+            <div role="status">
+              <svg
+                aria-hidden="true"
+                className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentFill"
+                />
+              </svg>
+              <span className="sr-only">Loading...</span>
+            </div>
+          </>
+        ) : (
+          <>
+            {weather && weather.weather?.length > 0 ? (
+              <>
+                <img
+                  className="h-40"
+                  src={getIcon(
+                    weather?.weather[0].id ? weather?.weather[0].id : 800
+                  )}
+                  alt=""
+                />
+                <span className="text-5xl dark:text-white text-gray-700 mb-5 font-bold flex items-center justify-center">
+                  <img
+                    className="h-20 mr-3"
+                    src={getTempIcon(
+                      Math.ceil(weather?.main.temp ? weather.main.temp : 0)
+                    )}
+                    alt=""
+                  />
+                  {Math.ceil(weather?.main.temp ? weather.main.temp : 0)}°C
+                </span>
+                <span className="mb-5 font-semibold dark:text-white text-gray-700">
+                  <span className="text-2xl ">{weather?.name}, </span>
+                  <span className="uppercase text-2xl">
+                    {weather?.sys.country}
+                  </span>
+                </span>
+                <ul className="flex flex-col sm:flex-row items-center mb-6 space-y-2 sm:space-y-0 dark:text-white text-gray-700">
+                  <li className='sm:after:content-["•"] sm:after:mx-3 after:opacity-70'>
+                    <span className="font-bold">Feels like: </span>
+                    <span>
+                      {Math.ceil(
+                        weather?.main.feels_like ? weather?.main.feels_like : 0
+                      )}
+                      °C
+                    </span>
+                  </li>
+                  <li className='sm:after:content-["•"] sm:after:mx-3 after:opacity-70'>
+                    <span className="font-bold">Humidity:</span>{" "}
+                    <span>{weather?.main.humidity}%</span>
+                  </li>
+                  <li className="">
+                    <span className="font-bold">Info:</span>{" "}
+                    <span>{weather?.weather[0].main}</span>
+                  </li>
+                </ul>
+              </>
+            ) : (
+              <div>
+                <span className="text-red-500 mt-4">No result</span>
+              </div>
+            )}
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="flex flex-col bg-white rounded p-4 w-full max-w-xs">
+                <div className="font-bold text-xl">Sydney</div>
+                <div className="text-sm text-gray-500">
+                  Thursday 10 May 2020
+                </div>
+                <div className="mt-6 text-6xl self-center inline-flex items-center justify-center rounded-lg text-indigo-400 h-24 w-24">
+                  <svg
+                    className="w-32 h-32"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                    ></path>
+                  </svg>
+                </div>
+                <div className="flex flex-row items-center justify-center mt-6">
+                  <div className="font-medium text-6xl">24°</div>
+                  <div className="flex flex-col items-center ml-6">
+                    <div>Cloudy</div>
+                    <div className="mt-1">
+                      <span className="text-sm">
+                        <i className="far fa-long-arrow-up"></i>
+                      </span>
+                      <span className="text-sm font-light text-gray-500">
+                        28°C
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-sm">
+                        <i className="far fa-long-arrow-down"></i>
+                      </span>
+                      <span className="text-sm font-light text-gray-500">
+                        20°C
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row justify-between mt-6">
+                  <div className="flex flex-col items-center">
+                    <div className="font-medium text-sm">Wind</div>
+                    <div className="text-sm text-gray-500">9k/h</div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="font-medium text-sm">Humidity</div>
+                    <div className="text-sm text-gray-500">68%</div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="font-medium text-sm">Visibility</div>
+                    <div className="text-sm text-gray-500">10km</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </main>
   );
