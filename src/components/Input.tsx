@@ -1,11 +1,13 @@
+import { AxiosError } from "axios";
 import React from "react";
 
 type IProps = {
   value: string;
   onChangeInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: AxiosError | null;
 };
 
-export const Input: React.FC<IProps> = ({ value, onChangeInput }) => {
+export const Input: React.FC<IProps> = ({ value, onChangeInput, error }) => {
   return (
     <form>
       <div className="h-16">
@@ -15,6 +17,24 @@ export const Input: React.FC<IProps> = ({ value, onChangeInput }) => {
           value={value}
           onChange={(e) => onChangeInput(e)}
         />
+        {error?.response?.status === 404 ? (
+          <>
+            <span className="text-sm text-red-500 font-medium">
+              City not found
+            </span>
+          </>
+        ) : (
+          <></>
+        )}
+        {error && error?.response?.status !== 404 ? (
+          <>
+            <span className="text-sm text-red-500 font-medium">
+              Something went wrong
+            </span>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </form>
   );
