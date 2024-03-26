@@ -20,7 +20,7 @@ export const Input: React.FC<IProps> = ({ value, onChangeInput, error }) => {
         {error?.response?.status === 404 || error?.response?.status === 400 ? (
           <>
             <span className="text-sm text-red-500 font-medium">
-              City not found
+              City is not found
             </span>
           </>
         ) : (
